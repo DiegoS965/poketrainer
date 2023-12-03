@@ -5,6 +5,7 @@ export class Pokemon {
     types: Type[];
     sprites: Sprite;
     stats: Stat[];
+    isSelected: boolean = false;
 
     constructor() {
         this.types = [];

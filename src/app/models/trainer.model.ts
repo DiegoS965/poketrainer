@@ -2,21 +2,22 @@ import { Pokemon } from "./pokemon.model";
 
 export class Trainer {
     name: string;
-    id: number;
+    id: string;
     hobbies: Hobbies[];
     birthdate: Date;
     image_path: string;
     dui?: string;
     minors_id?: string;
-    pokemons_owned: Pokemon[];
+    pokemons_owned?: Pokemon[];
 
-    constructor(name: string, id: number, image_path: string, hobbies: Hobbies[], pokemons: Pokemon[] ){
+    constructor(name: string, id: string, image_path: string, hobbies: Hobbies[], birthDate: Date, dui: string, minors_id: string, pokemons: Pokemon[] ){
         this.name = name;
         this.id = id;
         this.image_path = image_path;
         this.hobbies = hobbies;
-        /* this.dui = '';
-        this.minors_id = ''; */
+        this.birthdate = birthDate;
+        this.dui = dui;
+        this.minors_id = minors_id;
         this.pokemons_owned = pokemons;
     }
 

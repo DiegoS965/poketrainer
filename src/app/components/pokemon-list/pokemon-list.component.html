@@ -1,1 +1,81 @@
-<p>pokemon-list works!</p>
+<div class="container">
+    <div
+        class="row"
+        *ngIf="!isFetching"
+    >
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <h2 class="header__text">¡Ya casi terminamos tu perfil!</h2>
+            <p class="description__text">
+                Revisa la información, y completa lo solicitado.
+            </p>
+            <app-profile-card></app-profile-card>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <div class="d-flex flex-column justify-content-center">
+                <p class="title__text">Pokémon</p>
+                <p class="description__text">
+                    Selecciona 3 Pokémon para que sean parte de tu equipo.
+                </p>
+                <mat-form-field
+                    class="search col-sm-12 col-md-12 col-lg-8 col-xl-8"
+                    floatLabel="always"
+                >
+                    <input
+                        matInput
+                        [formControl]="search"
+                        (keydown.enter)="onSearchPokemon()"
+                        placeholder="Buscar por índice, nombre..."
+                    >
+                </mat-form-field>
+            </div>
+            <div
+                class="row pokemon__list"
+                (scroll)="onScroll($event)"
+            >
+                <div
+                    class="col-sm-6 col-md-6 col-lg-4 col-xl-4"
+                    *ngFor="let pokemon of pokemons"
+                >
+
+                    <mat-card
+                        class="pokemon__card"
+                        [ngClass]="{'yellow-background': pokemon.isSelected}"
+                        (click)="toggleCardBackground(pokemon)"
+                    >
+                        <mat-card-content>
+                            <div class="d-flex justify-content-center">
+                                <div class="image__preview">
+                                    <img
+                                        [src]="pokemon.sprites?.front_default"
+                                        [alt]="pokemon.name"
+                                        class="pokemon__image"
+                                    >
+                                    <div class="pokemon__description">
+                                        <p class="pokemon__description__text">{{pokemon.id}}</p>
+                                        <p class="pokemon__description__text">{{pokemon.name}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+            <br>
+            <div class="d-flex justify-content-center">
+                <button
+                    mat-raised-button
+                    class="submit__button"
+                    type="submit"
+                >
+                    Continuar
+                </button>
+            </div>
+        </div>
+    </div>
+    <div
+        class="row"
+        *ngIf="isFetching"
+    >
+        <app-loading></app-loading>
+    </div>
+</div>
