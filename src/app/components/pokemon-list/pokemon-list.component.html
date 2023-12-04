@@ -4,7 +4,12 @@
         *ngIf="!isFetching"
     >
         <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
-            <h2 class="header__text {{'font-weight: bold'}}">¡Ya casi terminamos!</h2>
+            <h2
+                class="header__text"
+                style="font-weight: bold;"
+            >
+                ¡Ya casi términamos!
+            </h2>
             <p class="description__text">
                 Revisa la información, y completa lo solicitado.
             </p>
@@ -33,11 +38,15 @@
             </div>
 
 
+
+
             <div class="row pokemon__list">
                 <div
                     class="col-sm-6 col-md-6 col-lg-4 col-xl-4"
                     *ngFor="let pokemon of pokemons"
                 >
+
+
 
 
                     <mat-card
