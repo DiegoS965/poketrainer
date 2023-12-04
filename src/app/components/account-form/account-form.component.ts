@@ -13,7 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 })
 export class AccountFormComponent implements OnInit, OnDestroy {
   isMinor: boolean = false;
-  editMode: boolean = false;
+  private editMode: boolean = false;
   form: FormGroup;
   maxDate: Date;
   defaultImageUrl: string = "../../../assets/icons/default_avatar.png";
@@ -21,47 +21,17 @@ export class AccountFormComponent implements OnInit, OnDestroy {
   profileIconName: string;
   isFetching: boolean = true;
   trainer: Trainer;
-  birthDaySubscription: Subscription;
-  profileDataSubscription: Subscription;
+  private birthDaySubscription: Subscription;
+  private profileDataSubscription: Subscription;
 
   constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute,
               private trainerService: TrainerService, private router: Router) {}
 
   ngOnInit() {
     this.maxDate = new Date;
-    this.form = this.fb.group({
-      name: ['', Validators.required],
-      hobbies: [''],
-      birthday: [null, Validators.required],
-      dui: [null, [this.customDuiValidator]],
-      minors_id: [null]
-    });
-
-    this.birthDaySubscription = this.form.get('birthday').valueChanges.subscribe((value) => {
-      this.isMinor = this.calculateAge(value) < 18;
-      this.updateDuiValidator();
-    });
-
-    this.profileDataSubscription = this.activatedRoute.data.subscribe(({trainer}: { trainer: Trainer })=>{
-      setTimeout(() => {
-        this.isFetching = false;
-      }, 1000);  //simular 1 segundo de tiempo de carga de datos
-      if (trainer === null) {
-        this.editMode = false;
-        this.trainer = null;
-      } else {
-        this.editMode = true;
-        this.trainer = trainer;
-        this.form.patchValue({
-          name: trainer.name,
-          hobbies: trainer.hobbies,
-          birthday: trainer.birthdate,
-          dui: trainer.dui,
-          minors_id: trainer.minors_id
-        });
-      }
-    })
-
+    this.initializeForm();
+    this.getBirthDaySubscription();
+    this.getProfileDataSubscription();
   }
 
   onSubmit() {
@@ -101,6 +71,45 @@ export class AccountFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.birthDaySubscription.unsubscribe();
     this.profileDataSubscription.unsubscribe();
+  }
+
+  private getBirthDaySubscription(): void {
+    this.birthDaySubscription = this.form.get('birthday').valueChanges.subscribe((value) => {
+      this.isMinor = this.calculateAge(value) < 18;
+      this.updateDuiValidator();
+    });
+  }
+
+  private getProfileDataSubscription(): void {
+    this.profileDataSubscription = this.activatedRoute.data.subscribe(({trainer}: { trainer: Trainer })=>{
+      setTimeout(() => {
+        this.isFetching = false;
+      }, 1000);  //simular 1 segundo de tiempo de carga de datos
+      if (trainer === null) {
+        this.editMode = false;
+        this.trainer = null;
+      } else {
+        this.editMode = true;
+        this.trainer = trainer;
+        this.form.patchValue({
+          name: trainer.name,
+          hobbies: trainer.hobbies,
+          birthday: trainer.birthdate,
+          dui: trainer.dui,
+          minors_id: trainer.minors_id
+        });
+      }
+    })
+  }
+
+  private initializeForm(): void {
+    this.form = this.fb.group({
+      name: ['', Validators.required],
+      hobbies: [''],
+      birthday: [null, Validators.required],
+      dui: [null, [this.customDuiValidator]],
+      minors_id: [null]
+    });
   }
 
   private previewImage(file: File): void {

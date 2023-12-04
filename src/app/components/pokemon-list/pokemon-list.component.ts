@@ -18,7 +18,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   search: FormControl = new FormControl('');
   isFetching: boolean = true;
   trainer: Trainer;
-  profileDataSubscription: Subscription;
+  private profileDataSubscription: Subscription;
   pokemonList: PokemonList;
   private offset: number;
   isLoading: boolean;
@@ -26,7 +26,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   pokemons: Pokemon[] = [];
   allPokemons: Pokemon[] = [];
   allowSave: boolean = false;
-  private maxPokemonNumber = 151;
 
   constructor(private activatedRoute: ActivatedRoute,
     private trainerService: TrainerService, private router: Router,
@@ -45,7 +44,23 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.isFetching = false;
       }, 1000);  //simular 1 segundo de tiempo de carga de datos
+      this.preselectPokemons();
     });
+  }
+
+  private preselectPokemons(): void {
+    if (this.trainer && this.trainer.pokemons_owned) {
+      this.pokemons.forEach(pokemon => {
+        if (this.trainer.pokemons_owned.some(ownedPokemon => ownedPokemon.id === pokemon.id)) {
+          pokemon.isSelected = true;
+        }
+      });
+    }
+  }
+
+  private updateAllowSave(): void {
+    const selectedCount = this.pokemons.filter(p => p.isSelected).length;
+    this.allowSave = selectedCount < 3;
   }
 
   getPage() {
@@ -64,13 +79,6 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       
     }
   }
-
-  /* onScroll(event: Event): void {
-    const element: HTMLDivElement = event.target as HTMLDivElement;
-    if(element.scrollHeight - element.scrollTop < 1000) {
-      this.getPage(this.offset);
-    }
-  } */
   
   handlePokemonSelection(pokemon: Pokemon): void {
     if (!pokemon.isSelected) {
@@ -83,6 +91,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     } else {
       pokemon.isSelected = false;
     }
+    this.updateAllowSave();
   }
 
   isCardDisabled(pokemon: Pokemon): boolean {
@@ -102,6 +111,8 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       this.pokemons.push(...pokemons);
       this.allPokemons = [...this.pokemons];
       this.isLoading = false;
+      this.preselectPokemons();
+      this.updateAllowSave();
     });
   }
 
@@ -115,6 +126,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     } else {
         this.pokemons = [...this.allPokemons];
     }
+    this.updateAllowSave();
   }
 
   submitSelection(): void {

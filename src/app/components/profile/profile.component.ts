@@ -12,7 +12,7 @@ import { Pokemon } from 'src/app/models/pokemon.model';
 export class ProfileComponent implements OnInit, OnDestroy {
   isFetching: boolean = true;
   trainer: Trainer;
-  profileDataSubscription: Subscription;
+  private profileDataSubscription: Subscription;
   pokemons: Pokemon[];
 
   constructor(private activatedRoute: ActivatedRoute,

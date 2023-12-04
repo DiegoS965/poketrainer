@@ -1,5 +1,5 @@
-<mat-toolbar>
-    <mat-toolbar-row>
+<p *ngIf="isTrainer">
+    <mat-toolbar>
         <img
             src="../../../assets/icons/pokemon-text-logo.svg"
             alt="pokedex"
@@ -7,5 +7,33 @@
             height="51px"
             (click)="onRedirectDefaultPage()"
         >
-    </mat-toolbar-row>
-</mat-toolbar>
+        <span class="spacer"></span>
+        <div>
+            <button
+                class="mat-raised-button profile__button"
+                (click)="onRedirectDefaultPage()"
+            >
+                <div class="d-flex justify-content-center">
+                    <p class="button__text">
+                        {{trainer.name | titlecase | firstName}}
+                    </p>
+                </div>
+            </button>
+            <img
+                src="../../../assets/icons/search_icon.svg"
+                alt="search-icon"
+            >
+        </div>
+    </mat-toolbar>
+</p>
+<p>
+    <mat-toolbar *ngIf="!trainer">
+        <img
+            src="../../../assets/icons/pokemon-text-logo.svg"
+            alt="pokedex"
+            width="138px"
+            height="51px"
+            (click)="onRedirectDefaultPage()"
+        >
+    </mat-toolbar>
+</p>
