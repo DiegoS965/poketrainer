@@ -76,6 +76,15 @@ export class AccountFormComponent implements OnInit, OnDestroy {
   private getBirthDaySubscription(): void {
     this.birthDaySubscription = this.form.get('birthday').valueChanges.subscribe((value) => {
       this.isMinor = this.calculateAge(value) < 18;
+      if (this.isMinor) {
+        this.form.patchValue({
+          dui: null
+        })
+      } else {
+        this.form.patchValue({
+          minors_id: null
+        })
+      }
       this.updateDuiValidator();
     });
   }

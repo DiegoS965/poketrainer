@@ -6,6 +6,9 @@
         >
             <span class="profile__card__title__preview">{{trainer.name | titlecase}}</span>
 
+
+
+
         </mat-card-header>
         <mat-card-header
             *ngIf="!isPreview"
@@ -39,7 +42,9 @@
                     <span>Dui:</span>
                 </div>
                 <div class="align__right profile__card__hobbie__description">
-                    <span>{{trainer.hobbies | titlecase}}</span>
+                    <span>
+                        {{getHobbieName(trainer.hobbies[0].toString())}}
+                    </span>
                     <br>
                     <span>{{birthdate | age}} años</span>
                     <br>

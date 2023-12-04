@@ -48,6 +48,9 @@
                 </mat-card>
             </div>
 
+
+
+
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <div class="form__container">
@@ -63,7 +66,7 @@
                         <div class="d-flex flex-column justify-content-center">
                             <mat-form-field
                                 class="form__fields"
-                                appearance="fill"
+                                appearance="outline"
                             >
                                 <mat-label>Nombre</mat-label>
                                 <input
@@ -72,12 +75,18 @@
                                 >
                             </mat-form-field>
 
+
+
+
                             <mat-form-field
                                 class="form__fields"
-                                appearance="fill"
+                                appearance="outline"
                             >
                                 <mat-label>Pasatiempos</mat-label>
-                                <mat-select formControlName="hobbies">
+                                <mat-select
+                                    multiple
+                                    formControlName="hobbies"
+                                >
                                     <mat-option value="soccer">Jugar Fútbol</mat-option>
                                     <mat-option value="basquetball">Jugar Basquetball</mat-option>
                                     <mat-option value="tennis">Jugar Tennis</mat-option>
@@ -87,9 +96,12 @@
                                 </mat-select>
                             </mat-form-field>
 
+
+
+
                             <mat-form-field
                                 class="form__fields"
-                                appearance="fill"
+                                appearance="outline"
                             >
                                 <mat-label>Cumpleaños</mat-label>
                                 <input
@@ -106,7 +118,7 @@
                             </mat-form-field>
                             <mat-form-field
                                 class="form__fields"
-                                appearance="fill"
+                                appearance="outline"
                                 *ngIf="!isMinor"
                             >
                                 <mat-label>DUI</mat-label>
@@ -119,7 +131,7 @@
                             </mat-form-field>
                             <mat-form-field
                                 class="form__fields"
-                                appearance="fill"
+                                appearance="outline"
                                 *ngIf="isMinor"
                             >
                                 <mat-label>Carnet de minoridad</mat-label>
@@ -138,6 +150,9 @@
                                     Continuar
                                 </button>
                             </div>
+
+
+
 
                         </div>
                     </form>

@@ -22,6 +22,25 @@ export class ProfileCardComponent implements OnInit {
     this.birthdate = new Date(this.trainer.birthdate);
   }
 
+  getHobbieName(input: string): string {
+    switch (input) {
+      case "soccer":
+        return "Jugar Fútbol";
+      case "basquetball":
+        return "Jugar Basquetball";
+      case "tennis":
+        return "Jugar Tennis";
+      case "voleiball":
+        return "Jugar Voleiball";
+      case "fifa":
+        return "Jugar Fifa";
+      case "gaming":
+        return "Jugar Videojuegos";
+      default:
+        return "N/A";
+    }
+  }
+
   private checkForCurrentRoute(): void {
     const currentRoute = this.router.url;
     if (currentRoute === '/configuration/pokemon-selection') {
