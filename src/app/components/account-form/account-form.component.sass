@@ -2,17 +2,18 @@
 .form__container
     padding-top: 17%
     max-width: 350px
-.submit__button[type="submit"]
+.submit__button
     width: 222px
     height: 50px
     border-radius: 10px
-    background-color: $blue-dark
-    color: white
+    &:enabled
+        background-color: $blue-dark
+        color: white
     &:hover
         background-color: $blue-medium
-
     &:active
         background-color: $blue-light
+
 .form__fields
     background-color: white
     border: 1px solid $gray-light

@@ -2,8 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Trainer } from 'src/app/models/trainer.model';
 import { TrainerService } from 'src/app/services/trainer/trainer.service';
-import { Subscription } from 'rxjs';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, Subscription } from 'rxjs';
 import { PokemonList } from 'src/app/models/pokemon-list.model';
 import { PokemonsService } from 'src/app/services/pokemons/pokemons.service';
 import { Pokemon } from 'src/app/models/pokemon.model';
@@ -25,9 +24,9 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   isLastPage = false;
   pokemons: Pokemon[] = [];
-  toggleColor: boolean;
-  isSearching: boolean = false;
-  searchPokemon: Pokemon;
+  allPokemons: Pokemon[] = [];
+  allowSave: boolean = false;
+  private maxPokemonNumber = 151;
 
   constructor(private activatedRoute: ActivatedRoute,
     private trainerService: TrainerService, private router: Router,
@@ -36,17 +35,23 @@ export class PokemonListComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit(): void {
-    this.profileDataSubscription = this.activatedRoute.data.subscribe(({trainer}: { trainer: Trainer })=>{
-      this.trainer = trainer;
-      this.isFetching = false;
-    });
-    this.getPage(this.offset);
+    this.getProfileDataSubscription();
+    this.getPage();
   }
 
-  getPage(offset: number) {
+  private getProfileDataSubscription(): void {
+    this.profileDataSubscription = this.activatedRoute.data.subscribe(({trainer}: { trainer: Trainer })=>{
+      this.trainer = trainer;
+      setTimeout(() => {
+        this.isFetching = false;
+      }, 1000);  //simular 1 segundo de tiempo de carga de datos
+    });
+  }
+
+  getPage() {
     if(!this.isLoading && !this.isLastPage) {
       this.isLoading = true;
-      this.pokemonService.getPokemonList(offset)
+      this.pokemonService.getPokemonList(0,151)
       .subscribe((list: PokemonList[]) => {
         if(list.length === 0) {
           this.isLastPage = true;
@@ -56,40 +61,33 @@ export class PokemonListComponent implements OnInit, OnDestroy {
           this.getPokemon(list);
         }
       })
+      
     }
   }
 
-  onScroll(event: Event): void {
+  /* onScroll(event: Event): void {
     const element: HTMLDivElement = event.target as HTMLDivElement;
     if(element.scrollHeight - element.scrollTop < 1000) {
       this.getPage(this.offset);
     }
-  }
+  } */
   
-  toggleCardBackground(pokemon: Pokemon): void {
-    pokemon.isSelected = !pokemon.isSelected;
+  handlePokemonSelection(pokemon: Pokemon): void {
+    if (!pokemon.isSelected) {
+      const selectedCount = this.pokemons.filter(p => p.isSelected).length;
+      if (selectedCount < 3) {
+        pokemon.isSelected = true;
+      } else {
+        this.snackbar.open('Solo puedes seleccionar un máximo de 3 pokemones', 'OK', { duration: 3000 });
+      }
+    } else {
+      pokemon.isSelected = false;
+    }
   }
 
-  onSearchPokemon(): void {
-    const value = this.search.value;
-    if (value === '') {
-      this.isSearching = false;
-    } else {
-      this.isSearching = true;
-      this.isLoading = true;
-      this.pokemonService.getPokemonDetail(value)
-      .subscribe({next: (pokemon: Pokemon) => {
-        this.searchPokemon = pokemon;
-        this.isLoading = false;
-      }, error: (error: any) => {
-        this.isLoading = false;
-        if(error.status === 404) {
-          this.snackbar.open('Sorry, Pokemon not found', 'Ok', {
-            duration: 5000,
-          })
-        }
-      }})
-    }
+  isCardDisabled(pokemon: Pokemon): boolean {
+    const selectedCount = this.pokemons.filter(p => p.isSelected).length;
+    return selectedCount >= 3 && !pokemon.isSelected;
   }
 
   private getPokemon(list: PokemonList[]) {
@@ -100,11 +98,30 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       )
     });
 
-    forkJoin([...arr]).subscribe((pokemons: []) => {
+    forkJoin([...arr]).subscribe((pokemons: Pokemon[]) => {
       this.pokemons.push(...pokemons);
-      this.offset +=20;
+      this.allPokemons = [...this.pokemons];
       this.isLoading = false;
-    })
+    });
+  }
+
+  filterPokemons(): void {
+    const searchTerm = this.search.value.toLowerCase();
+    if (searchTerm) {
+        this.pokemons = this.allPokemons.filter(pokemon =>
+            pokemon.name.toLowerCase().includes(searchTerm) ||
+            pokemon.id.toString().includes(searchTerm)
+        );
+    } else {
+        this.pokemons = [...this.allPokemons];
+    }
+  }
+
+  submitSelection(): void {
+    this.trainer.pokemons_owned = this.pokemons.filter(p => p.isSelected);
+    console.log("seleccionados", this.pokemons.filter(p => p.isSelected))
+    this.trainerService.storeTrainer(this.trainer);
+    this.router.navigate(['/profile']);
   }
 
   ngOnDestroy(): void {

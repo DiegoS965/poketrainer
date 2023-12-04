@@ -8,7 +8,6 @@ export const ProfileDataResolver: ResolveFn<Trainer> = (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot,
 ) => {
-    delay(2000);
     
     return inject(TrainerService).getTrainer();
 }

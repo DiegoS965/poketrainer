@@ -3,14 +3,14 @@ import { Pokemon } from "./pokemon.model";
 export class Trainer {
     name: string;
     id: string;
-    hobbies: Hobbies[];
+    hobbies: string;
     birthdate: Date;
     image_path: string;
     dui?: string;
     minors_id?: string;
-    pokemons_owned?: Pokemon[];
+    pokemons_owned?: Pokemon[] = [];
 
-    constructor(name: string, id: string, image_path: string, hobbies: Hobbies[], birthDate: Date, dui: string, minors_id: string, pokemons: Pokemon[] ){
+    constructor(name: string, id: string, image_path: string, hobbies: string, birthDate: Date, dui: string, minors_id: string, pokemons: Pokemon[] ){
         this.name = name;
         this.id = id;
         this.image_path = image_path;
@@ -23,6 +23,3 @@ export class Trainer {
 
 }
 
-class Hobbies {
-    name: string;
-}

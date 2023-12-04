@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;800&family=Poppins:wght@300;400;500;600;700&display=swap')
 /* Color palette
 
 $blue-light: #2C85BC
@@ -22,7 +22,6 @@ body
     color: $blue-dark
     font-weight: 400
     font-size: 30px
-    margin: 2rem 0px 0px 0px !important
 
 .header__text
     color: $blue-medium
@@ -33,6 +32,30 @@ body
     color: $gray-medium
     font-weight: 400
     font-size: 18px
+.profile__title__text
+    font-size: 40px
+    font-weight: 700
+    color: black
 .image__preview
     position: relative
     display: inline-block
+.align__right
+    text-align: right
+.align__left
+    text-align: left
+.align__center
+    display: flex
+    align-items: center
+    justify-content: center
+    margin-left: 1rem
+.button__text
+    font-size: 12px
+    font-weight: 600
+    color: $blue-dark
+
+@for $i from 0 through 100
+    .w-#{$i}
+        width: #{$i * 1%}
+
+    .h-#{$i}
+        height: #{$i * 1%}

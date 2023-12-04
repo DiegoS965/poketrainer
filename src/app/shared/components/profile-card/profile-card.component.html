@@ -1,13 +1,27 @@
-<div class="d-flex justify-content-center">
-    <mat-card class="starter__card">
-        <mat-card-header class="d-flex justify-content-center">
-            <p class="starter__card__title">Imágen Perfil</p>
+<div class="d-flex justify-content-start">
+    <mat-card class="profile__card">
+        <mat-card-header
+            *ngIf="isPreview"
+            class="d-flex justify-content-center"
+        >
+            <span class="profile__card__title__preview">{{trainer.name | titlecase}}</span>
+
+        </mat-card-header>
+        <mat-card-header
+            *ngIf="!isPreview"
+            class="d-flex justify-content-between"
+        >
+            <span class="profile__card__title">Entrenador</span>
+            <img
+                src="../../../../assets/icons/trainer_logo.png"
+                alt="pokemon-trainer-logo"
+            >
         </mat-card-header>
         <mat-card-content>
             <div class="d-flex justify-content-center">
                 <div class="image__preview">
                     <img
-                        [src]="profileIcon || defaultImageUrl"
+                        [src]="trainer.image_path || defaultImageUrl"
                         alt="Preview"
                         width="220"
                         height="220"
@@ -16,9 +30,23 @@
                 </div>
             </div>
             <br>
-            <div class="d-flex justify-content-space-between">
-                <div></div>
-                <div></div>
+            <div class="d-flex justify-content-between">
+                <div class="align__left profile__card__hobbie__title">
+                    <span>Pasatiempo:</span>
+                    <br>
+                    <span>Edad:</span>
+                    <br>
+                    <span>Dui:</span>
+                </div>
+                <div class="align__right profile__card__hobbie__description">
+                    <span>{{trainer.hobbies | titlecase}}</span>
+                    <br>
+                    <span>{{birthdate | age}} años</span>
+                    <br>
+                    <span>
+                        {{trainer.dui ? trainer.dui : trainer.minors_id}}
+                    </span>
+                </div>
             </div>
         </mat-card-content>
     </mat-card>

@@ -3,16 +3,18 @@
         class="row"
         *ngIf="!isFetching"
     >
-        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
-            <h2 class="header__text">¡Ya casi terminamos tu perfil!</h2>
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <h2 class="header__text {{'font-weight: bold'}}">¡Ya casi terminamos!</h2>
             <p class="description__text">
                 Revisa la información, y completa lo solicitado.
             </p>
-            <app-profile-card></app-profile-card>
+        </div>
+        <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
+            <app-profile-card [trainer]="trainer"></app-profile-card>
         </div>
         <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6">
             <div class="d-flex flex-column justify-content-center">
-                <p class="title__text">Pokémon</p>
+                <span class="title__text">Pokémon</span>
                 <p class="description__text">
                     Selecciona 3 Pokémon para que sean parte de tu equipo.
                 </p>
@@ -23,15 +25,13 @@
                     <input
                         matInput
                         [formControl]="search"
-                        (keydown.enter)="onSearchPokemon()"
                         placeholder="Buscar por índice, nombre..."
+                        (keyup)="filterPokemons()"
                     >
                 </mat-form-field>
             </div>
-            <div
-                class="row pokemon__list"
-                (scroll)="onScroll($event)"
-            >
+
+            <div class="row pokemon__list">
                 <div
                     class="col-sm-6 col-md-6 col-lg-4 col-xl-4"
                     *ngFor="let pokemon of pokemons"
@@ -39,8 +39,8 @@
 
                     <mat-card
                         class="pokemon__card"
-                        [ngClass]="{'yellow-background': pokemon.isSelected}"
-                        (click)="toggleCardBackground(pokemon)"
+                        [ngClass]="{'yellow-background': pokemon.isSelected, 'pokemon__card__disabled': isCardDisabled(pokemon)}"
+                        (click)="handlePokemonSelection(pokemon)"
                     >
                         <mat-card-content>
                             <div class="d-flex justify-content-center">
@@ -65,9 +65,10 @@
                 <button
                     mat-raised-button
                     class="submit__button"
-                    type="submit"
+                    [disabled]="allowSave"
+                    (click)="submitSelection()"
                 >
-                    Continuar
+                    Guardar
                 </button>
             </div>
         </div>

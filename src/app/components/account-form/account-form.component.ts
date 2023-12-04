@@ -43,7 +43,9 @@ export class AccountFormComponent implements OnInit, OnDestroy {
     });
 
     this.profileDataSubscription = this.activatedRoute.data.subscribe(({trainer}: { trainer: Trainer })=>{
-      this.isFetching = false;
+      setTimeout(() => {
+        this.isFetching = false;
+      }, 1000);  //simular 1 segundo de tiempo de carga de datos
       if (trainer === null) {
         this.editMode = false;
         this.trainer = null;

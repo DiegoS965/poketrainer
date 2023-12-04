@@ -14,6 +14,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { UserPokemonsComponent } from './components/profile/user-pokemons/user-pokemons.component';
 import { SharedModule } from './shared/shared.module';
 import { DuiFormatDirective } from './components/account-form/dui-format.directive';
+import { StatBarComponent } from './components/profile/stat-bar/stat-bar.component';
+import { FirstNamePipe } from './components/profile/first-name.pipe';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { DuiFormatDirective } from './components/account-form/dui-format.directi
     PokemonListComponent,
     ProfileComponent,
     UserPokemonsComponent,
-    DuiFormatDirective
+    DuiFormatDirective,
+    StatBarComponent,
+    FirstNamePipe
   ],
   imports: [
     BrowserModule,
